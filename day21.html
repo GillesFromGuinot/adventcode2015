@@ -1,0 +1,51 @@
+<script src="input21.js"></script>
+<script>
+    weapons = weapons.split('\n').map(x => x.split(' ').map(z => isNaN(z) ? z : parseInt(z)));
+    armors = armors.split('\n').map(x => x.split(' ').map(z => isNaN(z) ? z : parseInt(z)))
+    rings = rings.split('\n').map(x => x.split(' ').map(z => isNaN(z) ? z : parseInt(z)))
+
+    function attaque(player1, player2) {
+        player2["vie"] -= player1["damage"] - player2["armor"];
+        return player2["vie"] <= 0;
+    }
+
+    function combat(player1, player2) {
+        while (true) {
+            if (attaque(player1, player2)) return true;
+            if (attaque(player2, player1)) return false;
+        }
+    }
+
+    function part12() {
+        let wins = [];
+        let lost = [];
+
+        for (let w = 0; w < weapons.length; w++) {
+            for (let a = 0; a < armors.length; a++) {
+                for (let r = 0; r < rings.length; r++) {
+                    for (let s = 0; s < rings.length; s++) {
+                        let cout = weapons[w][1] + armors[a][1] + rings[r][1] + rings[s][1];
+                        let damage = weapons[w][2] + armors[a][2] + rings[r][2] + rings[s][2];
+                        let armor = weapons[w][3] + armors[a][3] + rings[r][3] + rings[s][3];
+                        let vie = 100;
+                        let perso = { vie, damage, armor }
+                        let boss = { vie: 100, damage: 8, armor: 2 }
+
+                        let persoWin = combat(perso, boss);
+
+                        if (persoWin) wins.push([cout, damage, armor, "gagné"]);
+                        else lost.push([cout, damage, armor, "perdu"]);
+                    }
+                }
+            }
+        }
+
+        console.log(wins.sort((a,b)=>-b[0]+a[0]));
+        console.log(lost.sort((a,b)=>b[0]-a[0]));
+    }
+
+    part12();
+
+</script>
+
+</html>
